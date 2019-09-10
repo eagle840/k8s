@@ -1,0 +1,46 @@
+# setup a EFK Stack 
+
+## install dashboard
+
+## grab dash board token
+
+## export TOKEN=$(kubectl describe secret $(kubectl get secret | awk '/^dashboard-token-/{print $1}') | awk '$1=="token:"{print $2}') && echo -e "\n--- Copy and paste this token for dashboard access --\n$TOKEN\n---"
+
+## generate PV's
+mkdir -p /mnt/data/efk-master && kubectl create -f pv-master.yaml
+mkdir -p /mnt/data/efk-data && kubectl create -f pv-data.yaml
+
+[ INSTALL YAMLS FOR ABOVE]
+
+
+
+
+
+
+## install Elastisearch
+helm install stable/elasticsearch --name=elasticsearch --namespace=logs \
+--set client.replicas=1 \
+--set master.replicas=1 \
+--set cluster.env.MINIMUM_MASTER_NODES=1 \
+--set cluster.env.RECOVER_AFTER_MASTER_NODES=1 \
+--set cluster.env.EXPECTED_MASTER_NODES=1 \
+--set data.replicas=1 \
+--set data.heapSize=300m \
+--set master.persistence.storageClass=elasticsearch-master \
+--set master.persistence.size=5Gi \
+--set data.persistence.storageClass=elasticsearch-data \
+--set data.persistence.size=5Gi
+
+## install fluent-bit
+
+helm install stable/fluent-bit --name=fluent-bit --namespace=logs --set backend.type=es --set backend.es.host=elasticsearch-client
+
+## install kibana
+
+helm install stable/kibana --name=kibana --namespace=logs --set env.ELASTICSEARCH_HOSTS=http://elasticsearch-client:9200 --set service.type=NodePort --set service.nodePort=31000
+
+## install random logger if needed
+
+kubectl run random-logger --image=chentex/random-logger
+
+# index pattern for kabana pattern kubernetes_cluster-*
