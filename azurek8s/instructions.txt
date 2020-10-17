@@ -1,0 +1,29 @@
+
+MOVE ALL THIS to github, so you can do a git clone
+
+k create ns app-space
+
+k run  webapp-wear --image=kodekloud/ecommerce:apparels --port=8080 -n app-space
+k run  webapp-video --image=kodekloud/ecommerce:video --port=8080 -n app-space
+k run  default-backend --image=kodekloud/ecommerce:404 --port=8080 -n app-space
+
+k create -f webapp-wear-svc.yaml
+k create -f webapp-video-svc.yaml
+k create -f default-backend-svc.yaml
+
+
+k create ns ingress-space
+
+k create configmap nginx-configuration -n ingress-space
+
+k create sa ingress-serviceaccount  -n ingress-space
+
+!create role
+!create rolebindings
+!create clusterrole
+!create crb
+!create ingress-controller.yaml
+!create ingress-service.yaml
+!create ingress-resource in app-space
+
+
