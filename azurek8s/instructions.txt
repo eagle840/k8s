@@ -23,7 +23,8 @@ k create sa ingress-serviceaccount  -n ingress-space
 !create clusterrole
 !create crb
 !create ingress-controller.yaml
-!create ingress-service.yaml
+!create ingress-service.yaml << WRONG
+   this creates a nodeport svc, you need an externalIPs: - 10.1.0.4
 !create ingress-resource in app-space
 
 

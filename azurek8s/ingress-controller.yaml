@@ -20,7 +20,7 @@ spec:
           args:
             - /nginx-ingress-controller
             - --configmap=$(POD_NAMESPACE)/nginx-configuration
-            - --default-backend-service=app-space/default-http-backend
+            - --default-backend-service=app-space/default-backend
           env:
             - name: POD_NAME
               valueFrom:
