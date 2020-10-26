@@ -19,3 +19,13 @@ spec:
         backend:
           serviceName: webapp-video
           servicePort: 8080
+      - backend:
+            serviceName: nginx
+            servicePort: 80
+        path: /
+        pathType: ImplementationSpecific
+      - backend:
+          serviceName: apache-svc
+          servicePort: 80
+        path: /apache
+        pathType: ImplementationSpecific
